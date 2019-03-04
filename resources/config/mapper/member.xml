@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.jinkyu.pcroom.pc.dao.MemberDAO">
+	<resultMap id="memberMap" type="member" >
+		<result property="memNo" column="mem_no" />
+		<result property="memId" column="mem_id" />
+		<result property="memPw" column="mem_pw" />
+		<result property="memName" column="mem_name" />
+		<result property="memPhone" column="mem_phone" />
+		<result property="memEmail" column="mem_email" />
+		<result property="memTime" column="mem_time" />
+		<result property="managerPresence" column="managerpresence" />
+		<result property="loginPresence" column="loginpresence" />
+		<association property="seatNo" column="mem_no" select="selectSeatList">
+		</association>
+	</resultMap>
+	
+	<resultMap id="seatMap" type="seat" >
+		<result property="seatUseNo" column="seat_useNo" />
+		<result property="seatNo" column="seat_no" />
+		<result property="memNo" column="mem_no" />
+		<result property="startTime" column="seat_startTime" />
+		<result property="endTime" column="seat_endTime" />
+		<result property="chargingTime" column="seat_chargingTime" />
+	</resultMap>
+	
+	<select id="selectSeatList" parameterType="int" resultType="int">
+	select seat_no
+	  from tb_seat
+	 where mem_no = #{memNo}
+	   and seat_endtime is null
+	</select>
+	
+	<select id="selectMemberByMemNo" parameterType="int" resultMap="memberMap">
+	select *
+	  from tb_member
+	 where mem_no = #{memNo}
+	</select>
+	
+	<select id="selectMemNoBySeatNo" parameterType="int" resultType="int">
+	select mem_no
+  	  from tb_seat
+     where seat_no = #{seatNo}
+       and seat_endTime is null
+	</select>
+	
+	<select id="selectMemberList" resultMap="memberMap">
+	select *
+	  from tb_member
+	</select>
+	
+	<sql id="commonCheckMember">
+	select *
+	  from tb_member
+	 where mem_id= #{memId}
+	</sql>
+	
+	<select id="checkMemberLogin" parameterType="member" resultMap="memberMap">
+	<include refid="commonCheckMember"></include>
+	   and mem_pw = #{memPw} 
+	</select>
+	
+	<select id="checkMemberSignUp" parameterType="String" resultMap="memberMap">
+	<include refid="commonCheckMember"></include>
+	</select>
+	
+	<update id="updateMemberTime" parameterType="member">
+	update tb_member
+  	   set mem_time = #{memTime} + 60 * #{memFare.fareTime} 
+ 	 where mem_no = #{memNo}
+	</update>
+	
+	<update id="updateMemberTimeLogout" parameterType="member">
+	update tb_member
+  	   set mem_time = #{memTime} 
+ 	 where mem_no = #{memNo}
+	</update>  
+	
+	<insert id="insertMember" parameterType="member">
+	insert into tb_member(mem_no, mem_id, mem_pw, mem_name, mem_phone, mem_email)
+	values(s_member_mem_no.nextval, #{memId}, #{memPw}, #{memName}, #{memPhone}, #{memEmail})
+	</insert>
+	
+	 <update id="updateEndTime" parameterType="int">
+	 update tb_seat
+	    set seat_endtime = sysdate
+	  where mem_no = #{memNo}
+	    and seat_endtime is null
+	 </update>
+	 
+	 <update id="updateLoginPresenceWhenLogout" parameterType="int">
+	 update tb_member
+	    set loginpresence = 'n'
+	  where mem_no = #{memNo}
+	 </update>
+	 
+	 <update id="updateLoginPresenceWhenLogin" parameterType="int">
+	 update tb_member
+	    set loginpresence = 'y'
+	  where mem_no = #{memNo}
+	 </update>
+	
+</mapper>

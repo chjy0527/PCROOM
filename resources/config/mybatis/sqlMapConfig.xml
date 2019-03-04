@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<!-- 설정파일에서 사용할 프로퍼티의 파일의 경로 지정: classpath -->
+	<properties resource="config/mybatis/db.properties"/>
+	
+	<!-- SQL의 결과를 담을 VO 객체들의 별칭을 설정하여 사용의 편의를 도모
+	-->
+	<typeAliases>
+		<typeAlias alias="member" type="kr.co.jinkyu.pcroom.vo.Member" />
+		<typeAlias alias="fare" type="kr.co.jinkyu.pcroom.vo.Fare" />
+		<typeAlias alias="seat" type="kr.co.jinkyu.pcroom.vo.Seat" />
+		<typeAlias alias="foodkind" type="kr.co.jinkyu.pcroom.vo.FoodKind" />
+		<typeAlias alias="food" type="kr.co.jinkyu.pcroom.vo.Food" />
+		<typeAlias alias="order" type="kr.co.jinkyu.pcroom.vo.Order" />
+	</typeAliases>
+	
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+				<property name="driver" value="${driver}" />
+				<property name="url" value="${url}" />
+				<property name="username" value="${username}" />
+				<property name="password" value="${password}" />
+			</dataSource>
+		</environment>
+	</environments>
+
+	<mappers>
+		<mapper resource="config/mapper/member.xml"/>
+		<mapper resource="config/mapper/fare.xml"/>
+		<mapper resource="config/mapper/seat.xml"/>
+		<mapper resource="config/mapper/foodkind.xml"/>
+		<mapper resource="config/mapper/food.xml"/>
+		<mapper resource="config/mapper/order.xml"/>
+	</mappers>
+</configuration>

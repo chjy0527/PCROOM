@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.jinkyu.pcroom.pc.dao.FoodDAO">
+
+	<resultMap id="foodMap" type="food">
+		<result property="foodNo" column="food_no" />
+		<result property="foodName" column="food_name" />
+		<result property="foodPrice" column="food_price" />
+		<result property="fdkNo" column="fdk_no" />
+	</resultMap>
+	
+	<select id="selectFoodList"  parameterType ="int" resultMap="foodMap">
+   select *
+     from tb_food
+    where fdk_no = #{fdkNo}
+	</select>
+	
+	<select id="selectFoodByFoodName" parameterType="String" resultMap="foodMap">
+	select *
+	  from tb_food
+	 where food_name = #{foodName}
+	</select>
+	<insert id="insertFood" parameterType="food">
+	insert into tb_food(food_no, food_name, food_price, fdk_no)
+	values(s_food_no.nextval, #{foodName}, #{foodPrice},
+	(select fdk_no
+	   from tb_foodkind
+	  where fdk_kinds = #{foodKinds})
+	)
+	</insert>
+</mapper>	
+
+
+
+
+
+
+

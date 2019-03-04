@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.jinkyu.pcroom.pc.dao.FoodKindDAO">
+
+	<resultMap id="foodkindMap" type="foodkind">
+		<result property="fdkNo" column="fdk_no" />
+		<result property="fdkKinds" column="fdk_kinds" />
+	</resultMap>
+
+	<select id="selectFoodkindList"  resultMap="foodkindMap">
+	select *
+	  from tb_foodkind
+	</select>
+	<select id="selectFoodkindByFoodkindName" parameterType="String" resultMap="foodkindMap">
+	select *
+	  from tb_foodkind
+	 where fdk_kinds = #{fdkKinds}
+	</select>  
+	<insert id="insertFoodkind" parameterType="foodkind">
+	insert into tb_foodkind(fdk_no, fdk_kinds)
+	values(s_fdk_no.nextval, #{fdkKinds})
+	</insert>
+</mapper>	
+
+
+
+
+
+
+

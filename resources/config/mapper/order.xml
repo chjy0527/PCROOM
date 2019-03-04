@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.jinkyu.pcroom.pc.dao.OrderDAO">
+
+	<resultMap id="orderMap" type="order">
+		<result property="orderNo" column="order_no" />
+		<result property="foodSelNo" column="food_sel_no" />
+		<result property="seatNo" column="seat_no" />
+		<result property="orderQuantity" column="quantity" />
+		<result property="orderDate" column="order_date" />
+		<result property="foodNo" column="food_no" />
+		<result property="memNo" column="mem_no" />
+	</resultMap>
+
+	<insert id="insertOrderList"  parameterType="order">
+	insert into tb_order(
+		order_No, 
+		food_Sel_No, 
+		seat_No, 
+		Quantity, 
+		food_No, 
+		mem_No
+		)
+	values (
+		s_order_no.nextval, <!-- 시퀀스로 바꾸기 -->
+		#{foodSelNo}, <!-- 밑에 처럼 바꾸기 -->
+		#{seatNo}, 
+		#{orderQuantity}, 
+		#{foodNo}, 
+		#{memNo}
+	)
+	</insert>
+
+</mapper>	
+
+
+
+
+
+
+

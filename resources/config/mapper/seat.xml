@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.jinkyu.pcroom.pc.dao.SeatDAO">
+	<resultMap id="seatMap" type="seat" >
+		<result property="seatUseNo" column="seat_useNo" />
+		<result property="seatNo" column="seat_no" />
+		<result property="memNo" column="mem_no" />
+		<result property="startTime" column="seat_startTime" />
+		<result property="endTime" column="seat_endTime" />
+		<result property="chargingTime" column="seat_chargingTime" />
+		<association property="member" column="mem_no" select="selectMemberList">
+		</association>
+	</resultMap>
+	<resultMap id="memberMap" type="member" >
+		<result property="memNo" column="mem_no" />
+		<result property="memId" column="mem_id" />
+		<result property="memPw" column="mem_pw" />
+		<result property="memName" column="mem_name" />
+		<result property="memPhone" column="mem_phone" />
+		<result property="memEmail" column="mem_email" />
+		<result property="memTime" column="mem_time" />
+		<result property="managerPresence" column="managerpresence" />
+		<result property="loginPresence" column="loginpresence" />
+	</resultMap>
+	
+	<select id="selectSeatInfoByMemNo" parameterType="int" resultMap="seatMap" useCache="false" flushCache="true">
+	select *
+	  from tb_seat
+	 where mem_no = #{memNo}
+	   and seat_endtime is null
+	</select>
+	
+	<select id="selectSeatInfoBySeatNo" parameterType="int" resultMap="seatMap">
+	select *
+	  from tb_seat
+	 where seat_no = #{seatNo}
+	   and seat_endtime is null
+	</select>
+	
+	<!-- 현재 접속중인 자리에 대한 정보 출력 -->
+	<select id="selectSeatList" resultMap="seatMap" useCache="false" flushCache="true">
+	select *
+	  from tb_seat
+	 where seat_endtime is null
+	 order by seat_no
+	</select>
+	
+	<select id="selectMemberList" resultMap="memberMap" useCache="false" flushCache="true">
+	select *
+	  from tb_member
+	 where mem_no = #{memNo}
+	</select>
+	
+	<insert id="insertSeat" parameterType="member">
+	insert into tb_seat(seat_useno, mem_no, seat_no)
+	values(s_seat_useno.nextval, #{memNo},
+	       case when #{managerPresence} = 'y' then 0
+	            else #{seatNo} 
+	        end)
+	</insert>
+	
+	<update id="updateSeatChargingTimeByMemNo" parameterType="int">
+	update tb_seat
+	   set seat_chargingtime = sysdate
+	 where mem_no = #{memNo}
+	</update>
+</mapper>

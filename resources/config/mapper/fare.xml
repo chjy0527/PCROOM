@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.jinkyu.pcroom.pc.dao.FareDAO">
+	<resultMap id="fareMap" type="fare">
+		<result property="fareNo" column="fare_no"/>
+		<result property="fareTime" column="fare_time"/>
+		<result property="farePrice" column="fare_price"/>
+	</resultMap>
+	<select id="selectFareList" resultMap="fareMap">
+	select *
+	  from tb_fare
+	</select>
+	
+</mapper>
